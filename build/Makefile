@@ -1,5 +1,5 @@
 
-DEFAULT_TARGETS := module unit_tests run_unit_tests wheel sdist update_generated_files
+DEFAULT_TARGETS := module unit_tests update_generated_files run_unit_tests wheel sdist
 export DEFAULT_TARGETS
 
 ADDITIONAL_TARGETS := test flake8
@@ -110,7 +110,6 @@ SOURCEDIR     = $(ROOT_DIR)/docs
 BUILDDIR      = $(BIN_DIR)/docs
 
 html:
-	$(_hide_cmds)$(call log_command,cp $(ROOT_DIR)/README.rst $(SOURCEDIR))
 	$(_hide_cmds)$(call log_command,$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS))
 
 .PHONY: help Makefile

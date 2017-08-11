@@ -110,7 +110,60 @@ def test_acquisition(device_info):
             print(session.fetch(1000))
 
 
+<<<<<<< HEAD
 def test_multi_point_acquisition(device_info):
+=======
+def test_method_call_with_zero_parameter(device_info):
+    with nidmm.Session(device_info['name']) as session:
+        assert session.get_aperture_time_info()[1] == 0 # Assuming default aperture time unit will be seconds
+
+
+def test_method_call_with_one_parameter(device_info):
+    with nidmm.Session(device_info['name']) as session:
+        session.configure_power_line_frequency(60)
+
+
+def test_invalid_method_call(device_info):
+    #calling a function, without parameter, But it has a mandate parameter
+    with nidmm.Session(device_info['name']) as session:
+        try:
+            session.configure_power_line_frequency()
+            assert False
+        except TypeError as e:
+            print (e)
+            pass
+
+
+def test_method_call_with_two_parameter(device_info):
+    # Calling Configure Trigger function and asserting True if any error occurred while function call.
+    with nidmm.Session(device_info['name']) as session:
+        try:
+            session.configure_trigger(nidmm.TriggerSource.IMMEDIATE, 1)
+        except nidmm.Error as e:
+            print (e)
+            assert True
+
+
+def test_multi_point_acquisition(device_info):
+    with nidmm.Session(device_info['name']) as session:
+        session.configure_multi_point(4, 2, nidmm.SampleTrigger.IMMEDIATE, 0)
+        session.configure_measurement_digits(nidmm.Function.DC_VOLTS, 1, 5.5)
+        measurements, numberOfMeasurements = session.read_multi_point(-1, 8)
+        print(measurements)
+        assert len(measurements) == 8
+        assert numberOfMeasurements == 8
+
+
+def test_library_singleton(device_info):
+    with nidmm.Session(device_info['name']) as session:
+        lib1 = session.library
+    with nidmm.Session(device_info['name']) as session:
+        lib2 = session.library
+    assert lib1 == lib2
+
+
+def test_self_test(device_info):
+>>>>>>> master
     with nidmm.Session(device_info['name']) as session:
         session.configure_multi_point(4, 2, nidmm.SampleTrigger.IMMEDIATE, 0)
         session.configure_measurement_digits(nidmm.Function.DC_VOLTS, 1, 5.5)
@@ -127,8 +180,13 @@ def test_self_test():
         assert message == 'Self Test passed.'
 
 
+<<<<<<< HEAD
 def test_get_dev_temp():
     with nidmm.Session("PXI1Slot2") as session:
+=======
+def test_get_dev_temp(device_info):
+    with nidmm.Session(device_info['name']) as session:
+>>>>>>> master
         temperature = session.get_dev_temp('')
         print(temperature)
         assert 20 <= temperature <= 50
